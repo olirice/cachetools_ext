@@ -7,8 +7,6 @@ setup(
     name = "cachetools_ext",
     version = "0.0.1",
     packages = find_packages(exclude=("test")),
-    install_requires=[
-        "cachetools==4.*"
-        ],,,,
+    install_requires=[],
     extras_require= {"dev": DEV_REQUIRES}
 )
