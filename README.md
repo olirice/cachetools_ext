@@ -22,7 +22,33 @@
 
 An extension for [cachetools](https://github.com/tkem/cachetools)
 
-Features:
 
-    - cachetools_ext.sqlite.SQLiteLRUCache:
-        A `@cached` compatible on-disk SQLite LRU cache with optional TTL
+### Features:
+
+**cachetools_ext.sqlite.SQLiteLRUCache:**
+
+- A `cachetools.cached` compatible on-disk SQLite backed LRU cache with optional TTL. Note, the cache key must be a string.
+- Parameters:
+  - `maxsize: int = maximum number of entries in the cache before evicting`
+  - `path: Optional[Union[str, pathlib.Path]] = path to the sqlite database (does not need to exist)`
+  - `ttl: Optional[int] = time to live in seconds`
+  - `clear_on_start: bool = if true, clear the cache on instantiation`
+
+
+
+Usage:
+
+
+```python
+from pathlib import Path
+from urllib import request
+from cachetools import cached
+from cachetools_ext.sqlite import SQLiteLRUCache
+
+@cached(cache=SQLiteLRUCache(maxsize=32, ttl=360), key=lambda x: f'get_pep|num={x}')
+def get_pep(num):
+    """Lookup a Python Enhacement Proposals (PEP) by id"""
+    url = 'http://www.python.org/dev/peps/pep-%04d/' % num
+    with request.urlopen(url) as s:
+        return s.read()
+```
