@@ -23,6 +23,14 @@
 An extension for [cachetools](https://github.com/tkem/cachetools)
 
 
+### Installation:
+
+
+```shell
+pip install cachetools_ext
+```
+
+
 ### Features:
 
 **cachetools_ext.sqlite.SQLiteLRUCache:**
@@ -36,7 +44,7 @@ An extension for [cachetools](https://github.com/tkem/cachetools)
 
 
 
-Usage:
+### Usage:
 
 
 ```python
