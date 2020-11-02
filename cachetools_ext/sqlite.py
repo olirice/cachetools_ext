@@ -1,9 +1,8 @@
+import pickle
 import sqlite3
-from typing import Optional, Callable, Union, Any
 from collections.abc import MutableMapping
 from pathlib import Path
-import collections
-import pickle
+from typing import Any, Optional, Union
 
 
 class SQLiteLRUCache(MutableMapping):
@@ -23,17 +22,17 @@ class SQLiteLRUCache(MutableMapping):
         ttl: time to live in seconds
         """
 
-        if not ((path is None) or isinstance(path, Path)):
+        if not ((path is None) or isinstance(path, (str, Path))):
             raise TypeError("path must be str or None")
 
         if not ((ttl is None) or isinstance(ttl, int)):
             raise TypeError("ttl must be int or None")
 
-        if not ((maxsize is None) or isinstance(maxsize, int)):
+        if not isinstance(maxsize, int):
             raise TypeError("maxsize must be int or None")
 
         # Absolute path to the cache
-        self.path = Path(path).absolute if path else Path(".") / "cache.db"
+        self.path = Path(path).absolute() if path else Path(".") / "cache.db"
         self.ttl: Optional[int] = ttl
         self.maxsize = maxsize
         self.clear_on_start = clear_on_start
@@ -66,9 +65,7 @@ class SQLiteLRUCache(MutableMapping):
     def __getitem__(self, key):
         self.__delete_expired_entries()
 
-        entry = self.cursor.execute(
-            "select value from cache where key = ?", (key,)
-        ).fetchone()
+        entry = self.cursor.execute("select value from cache where key = ?", (key,)).fetchone()
 
         if entry is None:
             return self.__missing__(key)
@@ -124,7 +121,6 @@ class SQLiteLRUCache(MutableMapping):
         self.__delete_expired_entries()
         sql = "select key from cache;"
         keys = self.cursor.execute(sql).fetchall()
-        print(keys)
         for (key,) in keys:
             yield key
 

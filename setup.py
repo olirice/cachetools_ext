@@ -1,12 +1,14 @@
-from setuptools import setup, find_packages
+from setuptools import find_packages, setup
 
-
-DEV_REQUIRES = ["pytest", "pytest-cov", "pre-commit", "pylint", "black", "mypy"]
+TEST_REQUIRES = ["pytest", "pytest-cov"]
+DEV_REQUIRES = TEST_REQUIRES + ["pre-commit", "pylint", "black"]
 
 setup(
-    name = "cachetools_ext",
-    version = "0.0.1",
-    packages = find_packages(exclude=("test")),
+    name="cachetools_ext",
+    version="0.0.1",
+    author="Oliver Rice",
+    url="https://github.com/olirice/cachetools_ext",
+    packages=find_packages(exclude=("test")),
     install_requires=[],
-    extras_require= {"dev": DEV_REQUIRES}
+    extras_require={"dev": DEV_REQUIRES, "test": TEST_REQUIRES},
 )

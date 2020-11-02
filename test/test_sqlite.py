@@ -1,6 +1,8 @@
+from pathlib import Path
+
 import pytest
+
 from cachetools_ext.sqlite import SQLiteLRUCache
-import time
 
 
 def test_set_get():
@@ -43,6 +45,10 @@ def test_popitem():
     key, val = cache.popitem()
     assert (key, val) == ("hello", "world")
     assert len(cache) == 1
+
+    with pytest.raises(KeyError):
+        cache.popitem()
+        cache.popitem()
 
 
 def test_last_access_update():
@@ -136,4 +142,37 @@ def test_ttl():
 
     with pytest.raises(KeyError):
         res = cache["a"]
-        print(res)
+
+
+def test_input_validation():
+    SQLiteLRUCache(maxsize=1, path="cache.db")
+    SQLiteLRUCache(maxsize=1, path=Path("cache.db"))
+    with pytest.raises(TypeError):
+        SQLiteLRUCache(maxsize=1, path=1)
+
+    with pytest.raises(TypeError):
+        SQLiteLRUCache(maxsize=1, ttl="1")
+
+    with pytest.raises(TypeError):
+        SQLiteLRUCache(maxsize="1")
+
+
+def test_current_size_too_big():
+    cache = SQLiteLRUCache(maxsize=0)
+
+    with pytest.raises(ValueError):
+        cache["a"] = 1
+
+
+def test_items_keyerror_squashed():
+    cache = SQLiteLRUCache(maxsize=5)
+
+    cache["a"] = 1
+    cache["b"] = 2
+
+    items = cache.items()
+
+    del cache["b"]
+
+    for k, v in items:
+        assert True
