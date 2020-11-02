@@ -1,3 +1,4 @@
+import pytest
 from cachetools_ext.sqlite import SQLiteLRUCache
 import time
 
@@ -114,10 +115,25 @@ def test_maxsize():
     cache["a"] = 1
     cache["b"] = 2
     cache["c"] = 3
-    assert len(cache) ==3
+    assert len(cache) == 3
     cache["d"] = 4
-    assert len(cache) ==3
+    assert len(cache) == 3
     values = [x for x in cache.values()]
     assert 2 in values
     assert 3 in values
     assert 4 in values
+
+
+def test_ttl():
+    cache = SQLiteLRUCache(maxsize=3, clear_on_start=True, ttl=5)
+    cache["a"] = 1
+
+    cache.cursor.execute(
+        """
+    update cache set last_accessed_at = datetime(last_accessed_at, '-1 year');
+    """
+    )
+
+    with pytest.raises(KeyError):
+        res = cache["a"]
+        print(res)
