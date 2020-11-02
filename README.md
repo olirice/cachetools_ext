@@ -2,7 +2,7 @@
 
 <p>
 
-<a href="https://github.com/olirice/cachetools_ext/actions"><img src="https://github.com/olirice/cachetools_ext/workflows/Tests/badge.svg" alt="Tests" height="18"></a>
+<a href="https://github.com/olirice/cachetools_ext/actions"><img src="https://github.com/olirice/cachetools_ext/workflows/tests/badge.svg" alt="Tests" height="18"></a>
 <a href="https://codecov.io/gh/olirice/cachetools_ext"><img src="https://codecov.io/gh/olirice/cachetools_ext/branch/master/graph/badge.svg" height="18"></a>
 </p>
 
