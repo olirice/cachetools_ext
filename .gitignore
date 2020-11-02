@@ -61,3 +61,6 @@ venv/*
 
 # Eclipse
 .settings
+
+# sqlite
+*.db
