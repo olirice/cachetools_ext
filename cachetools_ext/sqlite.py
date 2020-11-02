@@ -93,6 +93,7 @@ class SQLiteLRUCache(MutableMapping):
 
         while current_size + value_size > self.maxsize:
             self.popitem()
+            current_size = len(self)
 
         self.cursor.execute(
             "insert or replace into cache(key, value) VALUES (?, ?)",
@@ -122,7 +123,9 @@ class SQLiteLRUCache(MutableMapping):
     def __iter__(self):
         self.__delete_expired_entries()
         sql = "select key from cache;"
-        for (key,) in self.cursor.execute(sql):
+        keys = self.cursor.execute(sql).fetchall()
+        print(keys)
+        for (key,) in keys:
             yield key
 
     def items(self):
@@ -133,6 +136,14 @@ class SQLiteLRUCache(MutableMapping):
                 yield key, value
             except KeyError:
                 continue
+
+    def keys(self):
+        for key, _ in self.items():
+            yield key
+
+    def values(self):
+        for _, value in self.items():
+            yield value
 
     def popitem(self):
         """Remove and return the `(key, value)` pair least recently used."""

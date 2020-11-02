@@ -99,10 +99,25 @@ def test_keys():
 def test_values():
     cache = SQLiteLRUCache(maxsize=3, clear_on_start=True)
     cache["hello"] = "world"
+    cache["a"] = "b"
 
     values = cache.values()
 
-    assert len([x for x in values]) == 1
+    assert len([x for x in values]) == 2
 
     for value in values:
-        assert value == "world"
+        assert value in ("world", "b")
+
+
+def test_maxsize():
+    cache = SQLiteLRUCache(maxsize=3, clear_on_start=True)
+    cache["a"] = 1
+    cache["b"] = 2
+    cache["c"] = 3
+    assert len(cache) ==3
+    cache["d"] = 4
+    assert len(cache) ==3
+    values = [x for x in cache.values()]
+    assert 2 in values
+    assert 3 in values
+    assert 4 in values
