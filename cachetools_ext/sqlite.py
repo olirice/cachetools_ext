@@ -54,8 +54,6 @@ class SQLiteLRUCache(MutableMapping):
             value blob,
             created_at datetime not null default (strftime('%Y-%m-%d %H:%M:%f', 'NOW')),
             last_accessed_at datetime not null default (strftime('%Y-%m-%d %H:%M:%f', 'NOW'))
-
-            
         );
         """
         )
@@ -108,9 +106,9 @@ class SQLiteLRUCache(MutableMapping):
 
     def __contains__(self, key) -> bool:
         self.__delete_expired_entries()
-        sql = "select true from cache where key = ?"
-        maybe_row = self.cursor.execute(sql, (key,)).fetchone()
-        if maybe_row is None:
+        sql = "select count(key) from cache where key = ?"
+        key_count = self.cursor.execute(sql, (key,)).fetchone()[0]
+        if key_count == 0:
             return False
         return True
 
