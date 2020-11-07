@@ -45,6 +45,11 @@ class SQLiteLRUCache(MutableMapping):
             # Clear the cahce
             self.cursor.execute("drop table if exists cache;")
 
+        # Enable reads while writing
+        self.cursor.execute("PRAGMA journal_mode=WAL;")
+        # Extend default timeout to 15 seconds
+        self.cursor.execute("PRAGMA busy_timeout=15000;")
+
         # Create the table if it doesn't exist
         self.cursor.execute(
             """
