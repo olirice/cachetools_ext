@@ -38,7 +38,7 @@ class SQLiteLRUCache(MutableMapping):
         self.clear_on_start = clear_on_start
 
         # SQLite connection
-        self.con = sqlite3.connect(str(self.path))
+        self.con = sqlite3.connect(str(self.path), check_same_thread=False)
         self.cursor = self.con.cursor()
 
         if clear_on_start:
