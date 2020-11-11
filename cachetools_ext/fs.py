@@ -27,10 +27,7 @@ class FSLRUCache(MutableMapping):
             raise TypeError("maxsize must be int or None")
 
         # Absolute path to the cache
-        path = Path(path).absolute() if path else Path(".") / "cache/"
-
-        if not path.is_dir():
-            raise ValueError("path must be a directory")
+        path = Path(path).absolute() if path else Path(".") / "cache"
 
         # Create the directory if not exists
         path.mkdir(parents=True, exist_ok=True)

@@ -122,7 +122,7 @@ def test_ttl():
 
 
 def test_input_validation():
-    with pytest.raises(ValueError):
+    with pytest.raises(FileExistsError):
         FSLRUCache(maxsize=1, path="cache.db")
 
     with pytest.raises(TypeError):
