@@ -1,6 +1,6 @@
 from setuptools import find_packages, setup
 
-TEST_REQUIRES = ["pytest", "pytest-cov", "moto3"]
+TEST_REQUIRES = ["pytest", "pytest-cov", "moto"]
 DEV_REQUIRES = TEST_REQUIRES + ["pre-commit", "pylint", "black"]
 
 setup(
