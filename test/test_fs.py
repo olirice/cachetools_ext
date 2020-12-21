@@ -61,7 +61,7 @@ def test_last_access_update():
     assert (key, val) == ("foo", "bar")
 
 
-def test_itmes():
+def test_items():
     cache = FSLRUCache(maxsize=3, clear_on_start=True)
     cache["hello"] = "world"
 
@@ -122,9 +122,6 @@ def test_ttl():
 
 
 def test_input_validation():
-    with pytest.raises(FileExistsError):
-        FSLRUCache(maxsize=1, path="cache.db")
-
     with pytest.raises(TypeError):
         FSLRUCache(maxsize=1, path=1)
 
