@@ -5,7 +5,7 @@ DEV_REQUIRES = TEST_REQUIRES + ["pre-commit", "pylint", "black"]
 
 setup(
     name="cachetools_ext",
-    version="0.0.6",
+    version="0.0.7",
     author="Oliver Rice",
     url="https://github.com/olirice/cachetools_ext",
     packages=find_packages(exclude=("test")),

@@ -22,6 +22,7 @@ class S3Cache(MutableMapping):
         self.key_prefix = key_prefix
 
     def __getitem__(self, key):
+        print("Getting")
         try:
             response = self.client.get_object(
                 Bucket=self.bucket, Key=self.key_prefix + key
@@ -30,16 +31,19 @@ class S3Cache(MutableMapping):
             return value
         except Exception:
             pass
+        print("miss")
         return self.__missing__(key)
 
     def __missing__(self, key):
         raise KeyError(key)
 
     def __setitem__(self, key: Any, value: Any) -> None:
+        print("setting")
         payload = pickle.dumps(value)
         self.client.put_object(
             Bucket=self.bucket, Key=(self.key_prefix + key), Body=payload
         )
+        print("set")
 
     def __delitem__(self, key):
         self.client.delete_object(Bucket=self.bucket, Key=self.key_prefix + key)
