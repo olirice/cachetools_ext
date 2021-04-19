@@ -4,7 +4,7 @@ import pickle
 import shutil
 from collections.abc import MutableMapping
 from pathlib import Path
-from typing import Any, Optional, Union
+from typing import Any, Union
 
 
 class FSLRUCache(MutableMapping):
@@ -13,8 +13,8 @@ class FSLRUCache(MutableMapping):
     def __init__(
         self,
         maxsize: int,
-        path: Optional[Union[Path, str]] = None,
-        ttl: Optional[Union[int, float]] = None,
+        path: Union[Path, str, None] = None,
+        ttl: Union[int, float, None] = None,
         clear_on_start=False,
     ):
         if not ((path is None) or isinstance(path, (str, Path))):
@@ -33,7 +33,7 @@ class FSLRUCache(MutableMapping):
         path.mkdir(parents=True, exist_ok=True)
 
         self.path = path
-        self.ttl: Optional[int] = ttl
+        self.ttl: Union[int, float, None] = ttl
         self.maxsize = maxsize
         self.clear_on_start = clear_on_start
 

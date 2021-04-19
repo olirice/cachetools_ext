@@ -58,6 +58,7 @@ def test_last_access_update():
     cache["hello"]
 
     key, val = cache.popitem()
+    print(key, val)
     assert (key, val) == ("foo", "bar")
 
 
