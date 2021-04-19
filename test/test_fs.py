@@ -57,6 +57,11 @@ def test_last_access_update():
     # Access "hello" to make "foo" the oldest key to be accessed
     cache["hello"]
 
+    # Is there a time delay on CI?
+    import time
+
+    time.sleep(3)
+
     key, val = cache.popitem()
     print(key, val)
     assert (key, val) == ("foo", "bar")
@@ -108,6 +113,7 @@ def test_maxsize():
     assert 2 in values
     assert 3 in values
     assert 4 in values
+    assert 1 not in values
 
 
 def test_ttl():
