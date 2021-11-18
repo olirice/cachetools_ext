@@ -148,8 +148,6 @@ class FSLRUCache(MutableMapping):
             except FileNotFoundError:
                 continue
 
-            print(now, created_ts)
-
             if now - created_ts > self.ttl:
                 try:
                     path.unlink()
