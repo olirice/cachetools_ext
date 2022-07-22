@@ -124,10 +124,19 @@ class FSLRUCache(MutableMapping):
 
     def popitem(self):
         """Remove and return the `(key, value)` pair least recently used."""
-        file_to_ts = {path: os.stat(path).st_atime_ns for path in self.path.glob("*")}
+        file_to_ts = {}
+        for path in self.path.glob("*"):
+            try:
+                atime_ns = os.stat(path).st_atime_ns
+            except FileNotFoundError:
+                # file has been deleted since detecting it with glob('*')
+                # this can ocurr if multiple processes share a cache
+                # and is safe to ignore
+                continue
+            file_to_ts[path] = atime_ns
 
         ordered_file_to_ts = sorted(file_to_ts.items(), key=lambda x: x[1])
-        for path, ts in ordered_file_to_ts:
+        for path, _ in ordered_file_to_ts:
             try:
                 key = self.path_to_key(path)
                 return (key, self.pop(key))
